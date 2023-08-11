@@ -1,5 +1,21 @@
 #include<stdio.h>
 
+void twoDigit(int n, char *ones[], char *tens[], char *doubleTen[])
+{
+    if (n < 10)
+        {
+            printf(ones[n]);
+        }
+        else if (n < 20)
+        {
+            printf(doubleTen[n - 10]);
+        }
+        else if (n < 100)
+        {
+            printf("%s %s", tens[n / 10 - 2], ones[n % 10]);
+        }
+}
+
 void words(int n, int type)
 {
     char *ones[] = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"};
