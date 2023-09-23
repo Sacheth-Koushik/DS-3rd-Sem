@@ -163,7 +163,6 @@ void show(node * start)
     printf("NULL \n");
 }
 
-
 node * pairwise_recur(node * head)
 {
     if (head == NULL || head -> next == NULL)
@@ -344,6 +343,75 @@ node * intersection(node * a, node * b)
 }
 
 
+void partition(node ** head, int x)
+{
+    // make 3 lists for smaller, equal, greater ele
+    node * smaller_head = NULL; node * smaller_last = NULL;
+    node * equal_head = NULL; node * equal_last = NULL;
+    node * greater_head = NULL; node * greater_last = NULL;
+    
+    node * tmp = *head;
+    
+    while(tmp)
+    {
+        if(tmp -> data == x)
+        {
+            if(equal_head == NULL)
+                equal_head = equal_last = tmp;
+            else
+            {
+                equal_last -> next = tmp;
+                equal_last = equal_last -> next;
+            }
+        }
+        else if(tmp -> data < x)
+        {
+            if(smaller_head == NULL)
+                smaller_head = smaller_last = tmp;
+            else
+            {
+                smaller_last -> next = tmp;
+                smaller_last = tmp;
+            }
+        }
+        else
+        {
+            if(greater_head == NULL)
+                greater_head = greater_last = tmp;
+            else
+            {
+                greater_last -> next = tmp;
+                greater_last = tmp;
+            }
+        }
+        
+        tmp = tmp -> next;
+    }
+    
+    if(!smaller_head)
+    {
+        if(!equal_head)
+        {
+            *head = greater_head;
+            return;
+        }
+        equal_last -> next = greater_head;
+        * head = equal_head;
+        return;
+    }
+    
+    if(!equal_head)
+    {
+        smaller_last -> next = greater_head;
+        * head = smaller_head;
+        return;
+    }
+    
+    smaller_last -> next = equal_head;
+    equal_last -> next = greater_head;
+    *head = smaller_head;
+}
+
 int main(void)
 {
     node * a = NULL;append(&a,1);append(&a,2);append(&a,3);append(&a,4);append(&a,5);append(&a,6);append(&a,7);
@@ -374,6 +442,7 @@ int main(void)
     show(c);
     node * revc = reverse_between(c, 2, 5);
     show(revc);
+    
     // (3) find nth node, 1 based indexing
     printf("6th node is: %d\n", find(d, 1));
     
@@ -433,7 +502,14 @@ int main(void)
     show(inter);
     
     //(13) sort the link list plainly
-    // then for nay key this is already sorted according to requirement
+    node * g = NULL;
+    append(&g, 10);append(&g, 4);append(&g, 5);append(&g, 30);append(&g, 2);append(&g, 50);
+    printf("The list is\n");
+    show(g);
+    partition(&g, 5);
+    printf("After partition\n");
+    show(g);
+    
     
     return 0;
 }
